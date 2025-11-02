@@ -8,27 +8,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "artist")
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Table(name = "song")
-public class Song {
+public class Artist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String name;
 
-    private Integer duration;
-
-    @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
-
-    @ManyToMany(mappedBy = "songs")
-    private List<Playlist> playlists;
+    @OneToMany(mappedBy = "artist")
+    private List<Song> songs;
 }
