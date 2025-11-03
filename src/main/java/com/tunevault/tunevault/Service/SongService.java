@@ -21,4 +21,8 @@ public class SongService {
     public Song findById(Long id) {
         return repository.findById(id).orElse(null);
     }
+
+    public Song save(Song song) {
+        return repository.save(song);
+    }
 }

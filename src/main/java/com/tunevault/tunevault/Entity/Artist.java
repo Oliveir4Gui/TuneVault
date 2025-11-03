@@ -1,6 +1,7 @@
 package com.tunevault.tunevault.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class Artist {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "artist")
     private List<Song> songs;
 }

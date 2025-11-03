@@ -14,31 +14,41 @@ import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class SongMapper {
 
-    private ArtistService artistService;
+    private final ArtistService artistService;
 
     public Song toSongEntity(SongRequest songRequest) {
-        Optional<Artist> artist =artistService.findById(songRequest.artist_id());
+        Artist artist = artistService.findById(songRequest.artist_id())
+                .orElseThrow(() -> new RuntimeException("Artist not found with id: " + songRequest.artist_id()));
         List<Playlist> playlists = songRequest.playlists().stream().map(playlist -> Playlist.builder().id(playlist).build()).toList();
         return Song.builder()
                 .title(songRequest.title())
                 .duration(songRequest.duration())
-                .artist(artist.orElse(null))
+                .artist(artist)
                 .playlists(playlists)
                 .build();
     }
 
-    public static SongResponse toSongResponse(Song song) {
-       List<Long> playlists = song.getPlaylists().stream().map(playlist -> playlist.getId()).toList();
+    public SongResponse toSongResponse(Song song) {
+       List<Long> playlists = song.getPlaylists() != null ? song.getPlaylists().stream().map(playlist -> playlist.getId())
+               .toList() : Collections.emptyList();
+
+        String artistName = song.getArtist() != null
+                ? song.getArtist().getName()
+                : "Artista Desconhecido";
+
+       Artist artist = song.getArtist();
         return SongResponse.builder()
                 .title(song.getTitle())
                 .duration(song.getDuration())
-                .artistName(song.getArtist().getName())
+                .artistName(artist.getName())
                 .playlists(playlists)
                 .build();
     }

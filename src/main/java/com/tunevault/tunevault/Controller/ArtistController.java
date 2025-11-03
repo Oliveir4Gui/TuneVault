@@ -31,4 +31,6 @@ public class ArtistController {
      artistService.save(artist);
      return ArtistMapper.toArtistResponse(artist);
     }
+
+    
 }
