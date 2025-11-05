@@ -31,4 +31,18 @@ public class SongController {
         songService.save(toSong);
         return songMapper.toSongResponse(toSong);
     }
+
+    @PutMapping("/{id}")
+    public SongResponse update(@PathVariable Long id, @RequestBody SongRequest song) {
+        return songService.update(id, songMapper.toSongEntity(song))
+                .stream()
+                .map(song1 -> songMapper.toSongResponse(song1))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        songService.delete(id);
+    }
 }
