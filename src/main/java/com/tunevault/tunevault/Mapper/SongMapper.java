@@ -14,6 +14,7 @@ import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class SongMapper {
     public Song toSongEntity(SongRequest songRequest) {
         Artist artist = artistService.findById(songRequest.artist_id())
                 .orElseThrow(() -> new RuntimeException("Artist not found with id: " + songRequest.artist_id()));
-        List<Playlist> playlists = songRequest.playlists().stream().map(playlist -> Playlist.builder().id(playlist).build()).toList();
+        List<Playlist> playlists = new ArrayList<>(songRequest.playlists().stream().map(playlist -> Playlist.builder().id(playlist).build()).toList());
         return Song.builder()
                 .title(songRequest.title())
                 .duration(songRequest.duration())
