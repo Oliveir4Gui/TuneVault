@@ -6,8 +6,10 @@ import com.tunevault.tunevault.Entity.Artist;
 import com.tunevault.tunevault.Mapper.ArtistMapper;
 import com.tunevault.tunevault.Service.ArtistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,6 +33,22 @@ public class ArtistController {
      artistService.save(artist);
      return ArtistMapper.toArtistResponse(artist);
     }
+
+    @GetMapping("/{id}")
+    public ArtistResponse findById(@PathVariable Long id) {
+        return artistService.findById(id).stream().map(artist -> ArtistMapper.toArtistResponse(artist)).findFirst()
+                .orElse(null);
+    }
+
+
+    @PutMapping("/{id}")
+    public ArtistResponse update(@PathVariable Long id, @RequestBody ArtistRequest request) {
+        return artistService.update(id, ArtistMapper.toArtist(request))
+                .map(artist -> ArtistMapper.toArtistResponse(artist)).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist not found"));
+    }
+
+
+
 
     
 }

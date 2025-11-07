@@ -9,6 +9,7 @@ import com.tunevault.tunevault.Entity.Song;
 import lombok.Builder;
 import lombok.experimental.UtilityClass;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,11 +20,11 @@ public class ArtistMapper {
 
     public static Artist toArtist (ArtistRequest request){
 
-        List<Song> list = null;
+        List<Song> list = new ArrayList<>();
 
         if (request.songs() != null) {
-            list = request.songs().stream().map(songId-> Song.builder()
-                    .id(songId).build()).toList();
+            list = new ArrayList<>( request.songs().stream().map(songId-> Song.builder()
+                    .id(songId).build()).toList());
         }
 
         return Artist.builder()

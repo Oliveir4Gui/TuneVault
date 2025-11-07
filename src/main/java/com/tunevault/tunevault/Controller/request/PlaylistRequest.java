@@ -6,10 +6,10 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record PlaylistResponse(
+public record PlaylistRequest(
         Long id,
         String name,
-        String description
-        List<SongResponse> song
+        String description,
+        List<Long> songs
 ) {
 }
